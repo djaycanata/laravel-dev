@@ -20,4 +20,6 @@ Route::get('/products/create', [ProductController::class,'create'])->name('produ
 Route::post('/products', [ProductController::class,'store'])->name('products.store');
 
 Route::get('shops/{userID}', [ShopController::class, 'index'])->name('shop.index');
-Route::post('/shops/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
+Route::post('shops/{userID}', [ShopController::class, 'create'])->name('shop.create');
+// Route::post('/shops/purchase', [ShopController::class, 'purchase'])->name('shop.purchase');
+// Route::post('/shops/create', [ShopController::class, 'create'])->name('shop.create');

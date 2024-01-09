@@ -30,6 +30,7 @@ class ProductController extends Controller
             'price' => $request->price,
             'stocks' => $request->stocks,
         ]);
+        dd($request);
 
         return redirect()->route('products.index')->with('success', 'Product added successfully.');
     }

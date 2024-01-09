@@ -12,7 +12,7 @@
             </div>
         @endif
 
-        <form action="{{ route('shop.purchase') }}" method="post">
+        <form id="purchaseForm"  action="{{ route('shop.create') }}" method="post">
             @csrf
             <table class="table">
                 <thead>
@@ -40,12 +40,14 @@
                     @endforelse
                 </tbody>
             </table>
-
             <button type="submit" class="btn btn-primary">Complete Purchase</button>
+
+
         </form>
     </div>
 
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
             var quantityInputs = document.querySelectorAll(".quantity-input");
 
