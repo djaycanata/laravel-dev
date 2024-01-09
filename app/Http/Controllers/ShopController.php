@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\dd;
+use Illuminate\Support\Facades\Validator;
+
 
 class ShopController extends Controller
 {
@@ -13,7 +16,9 @@ class ShopController extends Controller
     {
         // Assuming 'id' is the primary key column for the users table
         // $user = User::findOrFail($userID);
-        $user = User::find($userID, ['userID']);
+        // $user = User::find($userID, ['userID']);
+        $user = User::find($userID);
+        
         $products = Product::all();
         return view('shop.index', compact('products', 'user'));
     }
@@ -21,38 +26,30 @@ class ShopController extends Controller
     public function purchase(Request $request)
     {
         // Validate the form data
-        $request->validate([
-            'productName' => 'required|string|max:255',
-            'quantities.*' => 'required|numeric',
-            'totalAmount' => 'required|numeric',
-        ]);
-
-        dd($request->all());
-        var_dump($request->all());
-        die();
-
-        // Implement your purchase logic here
-        // Loop through the submitted quantities and perform necessary actions
-        // foreach ($request->quantities as $productId => $quantity) {
-        //     if ($quantity > 0) {
-        //         // Perform actions for each product being purchased
-        //         // For example, insert into the transactions table
-
-        //         // Uncomment the below lines after verifying the data
-
-        //         // Product::create([
-        //         //     'productName' => $request->productName,
-        //         //     'price' => $request->price,
-        //         //     'stocks' => $request->stocks,
-        //         // ]);
-
-        //         // return redirect()->route('products.index')->with('success', 'Product added successfully.');
-        //     }
+        // $validator = Validator::make($request->all(), [
+        //     'userID' => 'required|numeric',
+        //     'productNames' => 'required|array',
+        //     'productNames.*' => 'required|string|max:255',
+        //     'quantities' => 'required|array',
+        //     'quantities.*' => 'required|numeric|min:0',
+        //     'totalAmount' => 'required|numeric',
+        // ]);
+        
+        // if ($validator->fails()) {
+        //     return redirect()->back()->withErrors($validator)->withInput();
         // }
 
+        $transaction = new Transaction();
+        $transaction->user_id = $request->user_id;
+        
+        
+        dd($request->all());
+
+       
         // Redirect back with a success message
         // return redirect()->route('shop.index', ['userID' => $request->userID])->with('success', 'Purchase completed successfully.');
-        
+        return redirect()->route('shop.index', ['userID' => $request->userID])->with('success', 'Purchase completed successfully.');
+
     }
 
 }
