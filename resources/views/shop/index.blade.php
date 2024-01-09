@@ -12,7 +12,7 @@
             </div>
         @endif
 
-        <form id="purchaseForm"  action="{{ route('shop.create') }}" method="post">
+        <form id="purchaseForm"  action="{{ route('shop.purchase', ['userID' => ':userID']) }}" method="post">
             @csrf
             <table class="table">
                 <thead>
@@ -41,8 +41,6 @@
                 </tbody>
             </table>
             <button type="submit" class="btn btn-primary">Complete Purchase</button>
-
-
         </form>
     </div>
 

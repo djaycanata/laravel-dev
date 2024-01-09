@@ -27,7 +27,7 @@ class ShopController extends Controller
             'totalAmount' => 'required|numeric',
         ]);
 
-        // var_dump($request->all());
+        dd($request->all());
         var_dump($request->all());
         die();
 
@@ -39,11 +39,6 @@ class ShopController extends Controller
         //         // For example, insert into the transactions table
 
         //         // Uncomment the below lines after verifying the data
-
-        //         // var_dump($request->all());
-        //         // var_dump($request->all());
-        //         // print_r($request->all());
-        //         // die();
 
         //         // Product::create([
         //         //     'productName' => $request->productName,
@@ -57,18 +52,7 @@ class ShopController extends Controller
 
         // Redirect back with a success message
         // return redirect()->route('shop.index', ['userID' => $request->userID])->with('success', 'Purchase completed successfully.');
-    }
-    public function create(Request $request)
-    {
-        // Validate the form data
-        $request->validate([
-            'productName' => 'required|string|max:255',
-            'quantities.*' => 'required|numeric',
-            'totalAmount' => 'required|numeric',
-        ]);
-
-        return redirect()->route('shop.create', ['userID' => $request->userID])->with('success', 'Purchase completed successfully.');
-
+        
     }
 
 }
