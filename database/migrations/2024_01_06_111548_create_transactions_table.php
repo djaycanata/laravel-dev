@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id('transactionID');
             $table->integer('userID');
-            $table->integer('productID');
-            $table->string('productName');
-            $table->integer('quantity');
+            $table->json('productID');
+            $table->json('quantity');
             $table->decimal('totalAmount');
             $table->timestamps();
         });

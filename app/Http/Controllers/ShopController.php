@@ -39,12 +39,24 @@ class ShopController extends Controller
         $quantities = $request->input('quantities', []);
         $totalAmount = $request->input('totalAmount');
 
-        foreach ($selectedProductIDs as $index => $productID) {
-            DB::insert(
-                'INSERT INTO transactions (userID, productID, quantity, totalAmount, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())',
-                [$userID, $productID, $quantities[$index], $totalAmount]
-            );
-        }        
+        $productIDsJson = json_encode($selectedProductIDs);
+        $quantitiesJson = json_encode($quantities);
+
+        DB::insert(
+            'INSERT INTO transactions (userID, productID, quantity, totalAmount, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())',
+            [$userID, $productIDsJson, $quantitiesJson, $totalAmount]
+        );
+
+        // Generate a common transactionID for the entire transaction
+        // $transactionID = $userID * 1000000 + time();
+
+        // foreach ($selectedProductIDs as $index => $selectedProductID) {
+        //     DB::insert(
+        //         'INSERT INTO transactions (transactionID, userID, productID, quantity, totalAmount, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())',
+        //         [$transactionID, $userID, $selectedProductID, $quantities[$index], $totalAmount]
+        //     );
+        // }
+         
 
         // $validator = Validator::make($request->all(), [
         //     'userID' => 'required|numeric',
@@ -67,11 +79,10 @@ class ShopController extends Controller
         
         // // Create an array of records for bulk insertion
         // $records = [];
-        // foreach ($productNames as $index => $productName) {
+        // foreach ($selectedProductIDs as $index => $productID) {
         //     $records[] = [
         //         'userID' => $userID,
         //         'productID' => $productID,
-        //         'productName' => $productName,
         //         'quantity' => $quantities[$index],
         //         'totalAmount' => $totalAmount,
         //     ];

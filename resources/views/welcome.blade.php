@@ -11,6 +11,12 @@
         </div>
 
         <div class="mb-4">
+            <a href="{{ route('transaction.index') }}">
+                <h3>View Transactions</h3>
+            </a>
+        </div>
+
+        <div class="mb-4">
             @if(session('success'))
                 <div class="alert alert-success" role="alert">
                     {{ session('success') }}
