@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\dd;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class ShopController extends Controller
@@ -20,35 +22,80 @@ class ShopController extends Controller
         $user = User::find($userID);
         
         $products = Product::all();
+        // $product = Product::find();
+
         return view('shop.index', compact('products', 'user'));
     }
 
-    public function purchase(Request $request)
+    public function purchase(Request $request, $userID)
     {
-        // Validate the form data
+
+        $user = User::find($userID);
+        $productID = $request->input('productID');
+
+        $userID = $user->userID;
+        $productID = $request->productID;
+        $selectedProductIDs = $request->input('productID', []);
+        $quantities = $request->input('quantities', []);
+        $totalAmount = $request->input('totalAmount');
+
+        foreach ($selectedProductIDs as $index => $productID) {
+            DB::insert(
+                'INSERT INTO transactions (userID, productID, quantity, totalAmount, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())',
+                [$userID, $productID, $quantities[$index], $totalAmount]
+            );
+        }        
+
         // $validator = Validator::make($request->all(), [
         //     'userID' => 'required|numeric',
-        //     'productNames' => 'required|array',
+        //     'productID' => 'required|numeric',
         //     'productNames.*' => 'required|string|max:255',
-        //     'quantities' => 'required|array',
-        //     'quantities.*' => 'required|numeric|min:0',
+        //     '.*' => 'required|numeric|min:0',
         //     'totalAmount' => 'required|numeric',
         // ]);
         
         // if ($validator->fails()) {
         //     return redirect()->back()->withErrors($validator)->withInput();
         // }
+        
+        // // Extract data from the request
+        // $userID = $user->userID;
+        // $productID = $request->productID;
+        // $productNames = $request->input('productNames');
+        // $quantities = $request->input('quantities');
+        // $totalAmount = $request->input('totalAmount');
+        
+        // // Create an array of records for bulk insertion
+        // $records = [];
+        // foreach ($productNames as $index => $productName) {
+        //     $records[] = [
+        //         'userID' => $userID,
+        //         'productID' => $productID,
+        //         'productName' => $productName,
+        //         'quantity' => $quantities[$index],
+        //         'totalAmount' => $totalAmount,
+        //     ];
+        // }
+        
+        // Perform the bulk insertion using a single SQL query
+        // Transaction::insert($records);
 
-        $transaction = new Transaction();
-        $transaction->user_id = $request->user_id;
+        // dd($totalAmount);
         
+        // Redirect back with a success message
+        return redirect()->route('shop.index', ['userID' => $userID])->with('success', 'Purchase completed successfully.');
         
-        dd($request->all());
+
+
+        
+        // dd($request->all());
+        // dd($request->productID);
+        // dd($user->userID);
+        // dd($userID);
 
        
         // Redirect back with a success message
         // return redirect()->route('shop.index', ['userID' => $request->userID])->with('success', 'Purchase completed successfully.');
-        return redirect()->route('shop.index', ['userID' => $request->userID])->with('success', 'Purchase completed successfully.');
 
     }
 
